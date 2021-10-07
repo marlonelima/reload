@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "reload"
+      MYSQL_DATABASE: "reload"
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:6.2.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
