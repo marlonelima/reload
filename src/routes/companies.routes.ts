@@ -5,13 +5,15 @@ const companiesRoute = new Router()
 
 const companiesController = new CompaniesController()
 
-companiesRoute.get('/', companiesController.index)
-companiesRoute.get('/:id', companiesController.show)
+companiesRoute.get('/', companiesController.getCompanies)
+companiesRoute.get('/desktops', companiesController.getDesktops)
+
+companiesRoute.get('/:id', companiesController.getCompany)
 companiesRoute.get(
-  '/:companyId/contributors',
-  companiesController.getContributors
+  '/:id/contributors',
+  companiesController.getCompanyContributors
 )
-companiesRoute.get('/:companyId/desktops', companiesController.getDesktops)
+companiesRoute.get('/:id/desktops', companiesController.getCompanyDesktops)
 
 companiesRoute.post('/', (req, res) => {
   res.send('procurar por termo')

@@ -2,22 +2,25 @@ import database from '../database'
 import { Company, Contributor, Desktop } from '../@types'
 
 export class CompaniesService {
-  async index(): Promise<Company[]> {
+  async getCompanies(): Promise<Company[]> {
     return await database('companies')
   }
 
-  async show(id: number): Promise<Company> {
+  async getCompany(id: number): Promise<Company> {
     return await database('companies').first().where({ id })
   }
 
-  async getContributors(companyId: number): Promise<Contributor[]> {
+  async getCompanyContributors(companyId: number): Promise<Contributor[]> {
     return await database('contributors').where({
       fk_company: companyId
     })
   }
 
-  async getDesktops(companyId: number): Promise<Desktop[]> {
-    console.log(companyId)
+  async getCompanyDesktops(companyId: number): Promise<Desktop[]> {
     return await database('desktops').where({ fk_company: companyId })
+  }
+
+  async getDesktops(): Promise<Desktop[]> {
+    return await database('desktops')
   }
 }
