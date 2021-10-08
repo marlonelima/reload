@@ -15,8 +15,4 @@ companiesRoute.get(
 )
 companiesRoute.get('/:id/desktops', companiesController.getCompanyDesktops)
 
-companiesRoute.post('/', (req, res) => {
-  res.send('procurar por termo')
-})
-
 export default companiesRoute
