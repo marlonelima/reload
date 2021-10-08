@@ -9,7 +9,7 @@ export class SearchController {
     const { page } = req.query
     const { term } = req.body
 
-    if (!term) return errorHandler(res, 400, 'Voce deve procurar por um termo!')
+    if (!term) return errorHandler(res, 400, 'Você deve procurar por um termo!')
 
     const data = await searchService.companies(term, page)
 
@@ -21,7 +21,7 @@ export class SearchController {
     const { term, companyId } = req.body
 
     if (!term || !companyId)
-      return errorHandler(res, 400, 'Todos os parametros sao obrigatorios!')
+      return errorHandler(res, 400, 'Todos os parâmetros são obrigatórios!')
 
     const data = await searchService.desktops(term, companyId, page)
 
@@ -33,7 +33,7 @@ export class SearchController {
     const { term, companyId } = req.body
 
     if (!term || !companyId)
-      return errorHandler(res, 400, 'Todos os parametros sao obrigatorios!')
+      return errorHandler(res, 400, 'Todos os parâmetros são obrigatórios!')
 
     const data = await searchService.contributors(term, companyId, page)
 
