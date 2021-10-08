@@ -1,5 +1,5 @@
 import { Router } from 'restify-router'
-import { SearchController } from '../controllers/search.controller'
+import SearchController from '../controllers/search.controller'
 
 const searchRoute = new Router()
 

@@ -1,7 +1,7 @@
 import database from '../database'
 import { Company } from '../@types'
 
-export class SearchService {
+class SearchService {
   async companies(term: string, page?: number): Promise<Company[]> {
     const { data: companies } = await database('companies')
       .where('business_name', 'like', `%${term}%`)
@@ -61,3 +61,5 @@ export class SearchService {
     return contributors
   }
 }
+
+export default SearchService

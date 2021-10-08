@@ -1,7 +1,7 @@
 import database from '../database'
 import { Company, Contributor, Desktop } from '../@types'
 
-export class CompaniesService {
+class CompaniesService {
   async getCompanies(page?: number): Promise<Company[]> {
     const { data: companies } = await database('companies').paginate({
       perPage: 15,
@@ -54,3 +54,5 @@ export class CompaniesService {
     return desktops
   }
 }
+
+export default CompaniesService

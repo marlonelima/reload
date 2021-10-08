@@ -1,5 +1,5 @@
 import { Router } from 'restify-router'
-import { CompaniesController } from '../controllers/companies.controller'
+import CompaniesController from '../controllers/companies.controller'
 
 const companiesRoute = new Router()
 

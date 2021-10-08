@@ -1,10 +1,10 @@
-import { CompaniesService } from '../services/companies.service'
+import CompaniesService from '../services/companies.service'
 import { Request, Response } from 'restify'
 import { Company, Contributor, Desktop } from '../@types'
 
 const companiesService = new CompaniesService()
 
-export class CompaniesController {
+class CompaniesController {
   async getCompanies(req: Request, res: Response): Promise<Company[]> {
     const { page } = req.query
 
@@ -49,3 +49,5 @@ export class CompaniesController {
     return res.send(data)
   }
 }
+
+export default CompaniesController

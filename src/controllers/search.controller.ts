@@ -1,10 +1,10 @@
-import { SearchService } from '../services/search.service'
+import SearchService from '../services/search.service'
 import { Request, Response } from 'restify'
-import { errorHandler } from './../errors/index'
+import errorHandler from './../errors/index'
 
 const searchService = new SearchService()
 
-export class SearchController {
+class SearchController {
   async companies(req: Request, res: Response) {
     const { page } = req.query
     const { term } = req.body
@@ -40,3 +40,5 @@ export class SearchController {
     return res.send(data)
   }
 }
+
+export default SearchController
