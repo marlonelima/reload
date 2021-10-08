@@ -2,7 +2,6 @@ import restify from 'restify'
 import corsMiddleware from 'restify-cors-middleware'
 
 import companiesRoute from './routes/companies.routes'
-import searchRoute from './routes/search.routes'
 
 const app = restify.createServer({ ignoreTrailingSlash: true })
 
@@ -13,7 +12,6 @@ const cors = corsMiddleware({
 })
 
 companiesRoute.applyRoutes(app, '/companies')
-searchRoute.applyRoutes(app, '/search')
 
 app.pre(cors.preflight)
 app.pre(restify.pre.sanitizePath())

@@ -2,14 +2,15 @@ import database from '../config/database'
 import { Company, Contributor, Desktop } from '../@types'
 import { Cache } from '../config/redis'
 
+const ITEMS_PER_PAGE = 15
+
 class CompaniesService {
   async getCompany(id: number): Promise<Company> {
     const companyCacheIdentifier = `company_${id}`
 
-    const cached = await Cache.get(companyCacheIdentifier, true)
-    if (cached) return cached
+    let company = await Cache.get(companyCacheIdentifier)
 
-    const company = await database('companies').first().where({ id })
+    company ??= await database('companies').first().where({ id })
     if (company) await Cache.set(companyCacheIdentifier, company)
 
     return company
@@ -18,11 +19,11 @@ class CompaniesService {
   async getCompanies(page = 1): Promise<Company[]> {
     const companiesCacheIdentifier = `companies_pg=${page}`
 
-    const cached = await Cache.get(companiesCacheIdentifier, true)
+    const cached = await Cache.get(companiesCacheIdentifier)
     if (cached) return cached
 
     const { data: companies } = await database('companies').paginate({
-      perPage: 15,
+      perPage: ITEMS_PER_PAGE,
       currentPage: page
     })
 
@@ -40,7 +41,7 @@ class CompaniesService {
         fk_company: companyId
       })
       .paginate({
-        perPage: 15,
+        perPage: ITEMS_PER_PAGE,
         currentPage: page
       })
 
@@ -51,7 +52,7 @@ class CompaniesService {
     const { data: desktops } = await database('desktops')
       .where({ fk_company: companyId })
       .paginate({
-        perPage: 15,
+        perPage: ITEMS_PER_PAGE,
         currentPage: page
       })
 
@@ -61,17 +62,76 @@ class CompaniesService {
   async getDesktops(page = 1): Promise<Desktop[]> {
     const desktopsCacheIdentifier = `desktops_pg=${page}`
 
-    const cached = await Cache.get(desktopsCacheIdentifier, true)
+    const cached = await Cache.get(desktopsCacheIdentifier)
     if (cached) return cached
 
     const { data: desktops } = await database('desktops').paginate({
-      perPage: 15,
+      perPage: ITEMS_PER_PAGE,
       currentPage: page
     })
 
     await Cache.set(desktopsCacheIdentifier, desktops)
 
     return desktops
+  }
+
+  async searchInCompanies(term: string, page = 1): Promise<Company[]> {
+    const { data: companies } = await database('companies')
+      .where('business_name', 'like', `%${term}%`)
+      .orWhere('industry', 'like', `%${term}%`)
+      .orWhere('catch_phrase', 'like', `%${term}%`)
+      .orWhere('bs_company_statement', 'like', `%${term}%`)
+      .paginate({
+        perPage: 15,
+        currentPage: page
+      })
+
+    return companies
+  }
+
+  async searchInDesktops(
+    term: string,
+    companyId: string,
+    page = 1
+  ): Promise<Company[]> {
+    const { data: desktops } = await database('desktops')
+      .where((builder) => {
+        builder
+          .where('platform', 'like', `%${term}%`)
+          .orWhere('type', 'like', `%${term}%`)
+          .orWhere('os', 'like', `%${term}%`)
+      })
+      .where({ fk_company: companyId })
+      .paginate({
+        perPage: 15,
+        currentPage: page
+      })
+
+    return desktops
+  }
+
+  async searchInContributors(
+    term: string,
+    companyId: string,
+    page = 1
+  ): Promise<Company[]> {
+    const { data: contributors } = await database('contributors')
+      .where((builder) => {
+        builder
+          .where('first_name', 'like', `%${term}%`)
+          .orWhere('last_name', 'like', `%${term}%`)
+          .orWhere('title', 'like', `%${term}%`)
+          .orWhere('job_title', 'like', `%${term}%`)
+      })
+      .where({
+        fk_company: companyId
+      })
+      .paginate({
+        perPage: 15,
+        currentPage: page
+      })
+
+    return contributors
   }
 }
 

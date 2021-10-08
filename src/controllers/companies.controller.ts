@@ -6,12 +6,19 @@ import errorHandler from '../errors'
 const companiesService = new CompaniesService()
 
 class CompaniesController {
-  async getCompanies(req: Request, res: Response): Promise<Company[]> {
+  async getAllCompanies(req: Request, res: Response): Promise<Company[]> {
     const { page } = req.query
 
     const companies = await companiesService.getCompanies(page)
 
     return res.send(companies)
+  }
+
+  async getAllDesktops(req: Request, res: Response): Promise<Desktop[]> {
+    const { page } = req.query
+    const data = await companiesService.getDesktops(page)
+
+    return res.send(data)
   }
 
   async getCompany(req: Request, res: Response): Promise<Company | void> {
@@ -44,11 +51,27 @@ class CompaniesController {
     return res.send(data)
   }
 
-  async getDesktops(req: Request, res: Response): Promise<Desktop[]> {
+  async search(req: Request, res: Response) {
     const { page } = req.query
-    const data = await companiesService.getDesktops(page)
+    const companyId = req.header('companyId')
+    const { term } = req.body
 
-    return res.send(data)
+    if (!term || !companyId)
+      return errorHandler(res, 400, 'Todos os parâmetros são obrigatórios!')
+
+    const companies = await companiesService.searchInCompanies(term, page)
+    const desktops = await companiesService.searchInDesktops(
+      term,
+      companyId,
+      page
+    )
+    const contributors = await companiesService.searchInContributors(
+      term,
+      companyId,
+      page
+    )
+
+    return res.send({ companies, desktops, contributors })
   }
 }
 

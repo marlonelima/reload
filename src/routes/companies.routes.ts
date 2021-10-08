@@ -5,8 +5,9 @@ const companiesRoute = new Router()
 
 const companiesController = new CompaniesController()
 
-companiesRoute.get('/', companiesController.getCompanies)
-companiesRoute.get('/desktops', companiesController.getDesktops)
+companiesRoute.get('/', companiesController.getAllCompanies)
+companiesRoute.post('/search', companiesController.search)
+companiesRoute.get('/desktops', companiesController.getAllDesktops)
 
 companiesRoute.get('/:id', companiesController.getCompany)
 companiesRoute.get(

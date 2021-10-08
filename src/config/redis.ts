@@ -6,13 +6,11 @@ const redisClient = redis.createClient({
 })
 
 export const Cache = {
-  async set(key: string, value: any) {
+  async set(key: string, value: any, json = true) {
     return new Promise<void>((resolve) => {
-      let formatedValue
+      let formatedValue = value
 
-      if (typeof value === 'string') {
-        formatedValue = value
-      } else {
+      if (json) {
         formatedValue = JSON.stringify(value)
       }
 
@@ -20,10 +18,12 @@ export const Cache = {
     })
   },
 
-  async get(key: string, json: boolean): Promise<any | null> {
+  async get(key: string, json = true): Promise<any | null> {
     return new Promise((resolve) => {
       redisClient.get(key, (err, value) => {
-        return resolve(json && value ? JSON.parse(value) : value)
+        const result = json && value ? JSON.parse(value) : value
+
+        return resolve(result)
       })
     })
   },
