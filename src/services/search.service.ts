@@ -1,8 +1,8 @@
-import database from '../database'
+import database from '../config/database'
 import { Company } from '../@types'
 
 class SearchService {
-  async companies(term: string, page?: number): Promise<Company[]> {
+  async companies(term: string, page = 1): Promise<Company[]> {
     const { data: companies } = await database('companies')
       .where('business_name', 'like', `%${term}%`)
       .orWhere('industry', 'like', `%${term}%`)
@@ -10,7 +10,7 @@ class SearchService {
       .orWhere('bs_company_statement', 'like', `%${term}%`)
       .paginate({
         perPage: 15,
-        currentPage: page ?? 1
+        currentPage: page
       })
 
     return companies
@@ -19,7 +19,7 @@ class SearchService {
   async desktops(
     term: string,
     companyId: number,
-    page?: number
+    page = 1
   ): Promise<Company[]> {
     const { data: desktops } = await database('desktops')
       .where((builder) => {
@@ -31,7 +31,7 @@ class SearchService {
       .where({ fk_company: companyId })
       .paginate({
         perPage: 15,
-        currentPage: page ?? 1
+        currentPage: page
       })
 
     return desktops
@@ -40,7 +40,7 @@ class SearchService {
   async contributors(
     term: string,
     companyId: number,
-    page?: number
+    page = 1
   ): Promise<Company[]> {
     const { data: contributors } = await database('contributors')
       .where((builder) => {
@@ -55,7 +55,7 @@ class SearchService {
       })
       .paginate({
         perPage: 15,
-        currentPage: page ?? 1
+        currentPage: page
       })
 
     return contributors

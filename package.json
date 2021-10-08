@@ -1,11 +1,12 @@
 {
   "scripts": {
     "start": "node dist/server.js",
-    "start:dev": "tsnd --respawn --poll --transpile-only src/server.ts"
+    "start:dev": "cross-env NODE_ENV=development tsnd --respawn --poll --transpile-only src/server.ts"
   },
   "devDependencies": {
     "-": "^0.0.1",
     "@types/node": "^16.10.3",
+    "@types/redis": "^2.8.32",
     "@types/restify": "^8.5.2",
     "@types/restify-cors-middleware": "^1.0.2",
     "@types/restify-errors": "^4.3.4",
@@ -18,10 +19,12 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "knex": "^0.95.11",
     "knex-paginate": "^3.0.0",
     "mysql": "^2.18.1",
+    "redis": "^3.1.2",
     "restify": "^8.6.0",
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.2",

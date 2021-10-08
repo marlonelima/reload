@@ -14,17 +14,17 @@ export default {
     },
     migrations: {
       tableName: 'migrations',
-      directory: __dirname + '/src/database/migrations'
+      directory: __dirname + '/src/config/migrations'
     },
     seeds: {
-      directory: __dirname + '/src/database/seeds'
+      directory: __dirname + '/src/config/seeds'
     }
   },
 
   staging: {
     client: 'mysql',
     connection: {
-      host: process.env.DB_HOS,
+      host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
@@ -35,7 +35,7 @@ export default {
   production: {
     client: 'mysql',
     connection: {
-      host: process.env.DB_HOS,
+      host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,

@@ -1,6 +1,7 @@
 import CompaniesService from '../services/companies.service'
 import { Request, Response } from 'restify'
 import { Company, Contributor, Desktop } from '../@types'
+import errorHandler from '../errors'
 
 const companiesService = new CompaniesService()
 
@@ -13,12 +14,13 @@ class CompaniesController {
     return res.send(companies)
   }
 
-  async getCompany(req: Request, res: Response): Promise<Company> {
+  async getCompany(req: Request, res: Response): Promise<Company | void> {
     const { id } = req.params
 
-    const data = await companiesService.getCompany(id)
+    const company = await companiesService.getCompany(id)
+    if (!company) return errorHandler(res, 404, 'O ID informado não existe!')
 
-    return res.send(data)
+    return res.send(company)
   }
 
   async getCompanyContributors(

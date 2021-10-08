@@ -5,8 +5,6 @@ const searchRoute = new Router()
 
 const searchController = new SearchController()
 
-searchRoute.post('/companies', searchController.companies)
-searchRoute.post('/contributors', searchController.contributors)
-searchRoute.post('/desktops', searchController.desktops)
+searchRoute.post('/', searchController.get)
 
 export default searchRoute
