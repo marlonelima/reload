@@ -9,14 +9,14 @@ class CompaniesController {
   async getAllCompanies(req: Request, res: Response): Promise<Company[]> {
     const { page } = req.query
 
-    const companies = await companiesService.getCompanies(page)
+    const companies = await companiesService.getAllCompanies(page)
 
     return res.send(companies)
   }
 
   async getAllDesktops(req: Request, res: Response): Promise<Desktop[]> {
     const { page } = req.query
-    const data = await companiesService.getDesktops(page)
+    const data = await companiesService.getAllDesktops(page)
 
     return res.send(data)
   }

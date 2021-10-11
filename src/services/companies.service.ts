@@ -5,18 +5,7 @@ import { Cache } from '../config/redis'
 const ITEMS_PER_PAGE = 15
 
 class CompaniesService {
-  async getCompany(id: number): Promise<Company> {
-    const companyCacheIdentifier = `company_${id}`
-
-    let company = await Cache.get(companyCacheIdentifier)
-
-    company ??= await database('companies').first().where({ id })
-    if (company) await Cache.set(companyCacheIdentifier, company)
-
-    return company
-  }
-
-  async getCompanies(page = 1): Promise<Company[]> {
+  async getAllCompanies(page = 1): Promise<Company[]> {
     const companiesCacheIdentifier = `companies_pg=${page}`
 
     const cached = await Cache.get(companiesCacheIdentifier)
@@ -30,6 +19,33 @@ class CompaniesService {
     await Cache.set(companiesCacheIdentifier, companies)
 
     return companies
+  }
+
+  async getAllDesktops(page = 1): Promise<Desktop[]> {
+    const desktopsCacheIdentifier = `desktops_pg=${page}`
+
+    const cached = await Cache.get(desktopsCacheIdentifier)
+    if (cached) return cached
+
+    const { data: desktops } = await database('desktops').paginate({
+      perPage: ITEMS_PER_PAGE,
+      currentPage: page
+    })
+
+    await Cache.set(desktopsCacheIdentifier, desktops)
+
+    return desktops
+  }
+
+  async getCompany(id: number): Promise<Company> {
+    const companyCacheIdentifier = `company_${id}`
+
+    let company = await Cache.get(companyCacheIdentifier)
+
+    company ??= await database('companies').first().where({ id })
+    if (company) await Cache.set(companyCacheIdentifier, company)
+
+    return company
   }
 
   async getCompanyContributors(
@@ -55,22 +71,6 @@ class CompaniesService {
         perPage: ITEMS_PER_PAGE,
         currentPage: page
       })
-
-    return desktops
-  }
-
-  async getDesktops(page = 1): Promise<Desktop[]> {
-    const desktopsCacheIdentifier = `desktops_pg=${page}`
-
-    const cached = await Cache.get(desktopsCacheIdentifier)
-    if (cached) return cached
-
-    const { data: desktops } = await database('desktops').paginate({
-      perPage: ITEMS_PER_PAGE,
-      currentPage: page
-    })
-
-    await Cache.set(desktopsCacheIdentifier, desktops)
 
     return desktops
   }
